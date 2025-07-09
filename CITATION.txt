@@ -1,0 +1,14 @@
+Please cite the following paper when using the datasets or code from this repository:
+
+[Your Full Paper Citation Here]
+
+Example BibTeX:
+
+@article{yourpaper2025,
+  title={CoNav: [Full Paper Title]},
+  author={YourFirstName YourLastName and Co-authors},
+  journal={Journal Name},
+  year={2025},
+  doi={DOI_or_URL_if_available}
+}
+
