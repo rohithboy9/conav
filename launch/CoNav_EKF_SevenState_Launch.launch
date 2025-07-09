@@ -1,0 +1,32 @@
+<launch>
+  <!-- Arguments -->
+  <arg name="recordBag" default="true"/>
+  <arg name="BagName" default="CoNav_SevenStateEKF_localization.bag"/>
+  <arg name="bagfile" default="$(find conav)/data/CoNav_dataset1.bag"/>
+
+  <!-- Play rosbag -->
+  <node pkg="rosbag"
+        type="play"
+        name="player"
+        output="screen"
+        args="$(arg bagfile)" />
+
+  <!-- Localization nodes -->
+  <node pkg="conav"
+        type="CoNav_IMU_Filtering.py"
+        name="CoNav_IMU_Filtering"
+        output="screen" />
+
+  <node pkg="conav"
+        type="CoNav_EKF_SevenStateModel.py"
+        name="CoNav_EKF_SevenStateModel"
+        output="screen" />
+
+  <!-- Conditional rosbag record -->
+  <node if="$(arg recordBag)"
+        pkg="rosbag"
+        type="record"
+        name="record"
+        output="screen"
+        args="-O $(find conav)/data/$(arg BagName) /UAS1_estimated_states /UAS1_error_states /UAS1_true_states /UAS2_estimated_states /UAS2_error_states /UAS2_true_states /UAS3_estimated_states /UAS3_error_states /UAS3_true_states" />
+</launch>

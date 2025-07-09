@@ -1,0 +1,37 @@
+<launch>
+
+    <!-- Argument: Input bag file -->
+    <arg name="bagfile" default="$(find conav)/data/CoNav_dataset1.bag"/>
+
+    <!-- Argument: Enable or disable recording -->
+    <arg name="recordBag" default="true"/>
+
+    <!-- Argument: Output bag file name -->
+    <arg name="BagName" default="CoNav_FourStateEKF_localization.bag"/>
+
+    <!-- Node to play the input bag file -->
+    <node pkg="rosbag"
+          type="play"
+          name="player"
+          output="screen"
+          args="$(arg bagfile)" />
+
+    <!-- Node to run your EKF script -->
+    <node pkg="conav"
+          type="CoNav_EKF_FourStateModel.py"
+          name="CoNav_EKF_FourStateModel"
+          output="screen">
+    </node>
+
+    <!-- Node to record output topics (only if recordBag is true) -->
+    <node if="$(arg recordBag)"
+          name="record"
+          pkg="rosbag"
+          type="record"
+          output="screen"
+          args="-O $(find conav)/data/$(arg BagName)
+                /UAS1_estimated_states /UAS1_error_states /UAS1_true_states
+                /UAS2_estimated_states /UAS2_error_states /UAS2_true_states
+                /UAS3_estimated_states /UAS3_error_states /UAS3_true_states" />
+
+</launch>
